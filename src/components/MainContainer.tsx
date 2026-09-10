@@ -13,21 +13,20 @@ import setSplitText from "./utils/splitText";
 const TechStack = lazy(() => import("./TechStack"));
 
 const MainContainer = ({ children }: PropsWithChildren) => {
-  const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    window.innerWidth > 1024
-  );
+  // Default false so TechStack never renders on first paint on mobile
+  const [isDesktopView, setIsDesktopView] = useState<boolean>(false);
 
   useEffect(() => {
-    const resizeHandler = () => {
-      setSplitText();
-      setIsDesktopView(window.innerWidth > 1024);
+    const checkDesktop = () => {
+      setIsDesktopView(window.innerWidth >= 1024);
     };
-    resizeHandler();
-    window.addEventListener("resize", resizeHandler);
+    checkDesktop();
+    setSplitText();
+    window.addEventListener("resize", checkDesktop);
     return () => {
-      window.removeEventListener("resize", resizeHandler);
+      window.removeEventListener("resize", checkDesktop);
     };
-  }, [isDesktopView]);
+  }, []);
 
   return (
     <div className="container-main">
