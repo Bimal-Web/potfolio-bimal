@@ -1,83 +1,222 @@
+/* ── Header bar ─────────────────────────────────────────── */
 .header {
   display: flex;
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
   justify-content: space-between;
-  padding: 20px 0px;
-  margin-bottom: -100px;
+  align-items: center;
+  padding: 16px 0;
   box-sizing: border-box;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   top: 0;
   z-index: 9999;
+  gap: 12px;
 }
+
+/* ── Nav links ── */
 .header ul {
   font-size: 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 0;
   padding: 0;
   list-style: none;
-  column-gap: 40px;
-  row-gap: 8px;
-  align-items: end;
+  gap: 20px;
+  align-items: center;
+  flex-shrink: 0;
 }
+
 .header ul li {
-  margin-left: 0px;
-  letter-spacing: 1px;
+  font-family: var(--font-body);
+  letter-spacing: 0.5px;
   color: #ccc;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
 }
+
+/* ── Centre LinkedIn link (hidden on small screens) ── */
 .navbar-connect {
   position: absolute;
-  display: none;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 1px;
   font-weight: 500;
+  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
 }
+
+/* ── Brand / logo ── */
 .navbar-title {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: -0.2px;
+  text-decoration: none;
+  color: #fff;
+  flex-shrink: 0;
+  min-width: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-@media only screen and (min-width: 500px) {
+
+.navbar-title:active {
+  transform: scale(0.96);
+}
+
+/* Show brand text on all screens */
+.navbar-title-text {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── Profile picture ring ── */
+.profile-logo-wrapper {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #5eead4 0%, #0d9488 50%, #06b6d4 100%);
+  box-shadow: 0 0 14px rgba(94, 234, 212, 0.6), 0 0 28px rgba(94, 234, 212, 0.3);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navbar-title:hover .profile-logo-wrapper {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 20px rgba(94, 234, 212, 0.9), 0 0 40px rgba(94, 234, 212, 0.5);
+}
+
+.profile-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ─── Breakpoints ─────────────────────────────────────── */
+
+/* Small mobile (≤ 380px) */
+@media only screen and (max-width: 380px) {
   .header {
-    padding: 20px 0px;
+    gap: 8px;
+    padding: 12px 0;
+  }
+  .navbar-title {
+    gap: 6px;
+  }
+  .profile-logo-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+  .navbar-title-text {
+    font-size: 12px;
   }
   .header ul {
-    flex-direction: row;
-    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+  }
+}
+
+/* 381px - 479px (e.g. iPhone 14 Pro 393px) */
+@media only screen and (min-width: 381px) and (max-width: 479px) {
+  .navbar-title {
+    gap: 8px;
+  }
+  .profile-logo-wrapper {
+    width: 34px;
+    height: 34px;
+  }
+  .navbar-title-text {
+    font-size: 13px;
+  }
+  .header ul {
+    gap: 16px;
+    font-size: 12px;
+  }
+}
+
+/* 480px+ — comfortable brand text & nav spacing */
+@media only screen and (min-width: 480px) {
+  .navbar-title {
+    gap: 10px;
     font-size: 14px;
+  }
+  .navbar-title-text {
+    font-size: 14px;
+  }
+  .header ul {
+    gap: 22px;
+    font-size: 13px;
   }
   .header ul li {
     color: #eae5ec;
+  }
+}
+
+/* 768px+ — slightly larger, comfortable spacing */
+@media only screen and (min-width: 768px) {
+  .header {
+    padding: 20px 0;
+  }
+  .header ul {
+    gap: 32px;
+    font-size: 14px;
   }
   .navbar-title {
     font-size: 16px;
   }
 }
+
+/* 900px+ — show centre LinkedIn */
 @media only screen and (min-width: 900px) {
   .navbar-connect {
     display: block;
   }
 }
+
+/* 1200px+ — full spacing & sizes */
 @media only screen and (min-width: 1200px) {
   .header {
-    padding: 35px 0px;
+    padding: 35px 0;
   }
   .header ul {
-    column-gap: 80px;
+    gap: 80px;
     font-size: 16px;
   }
   .navbar-connect {
     font-size: 16px;
+    max-width: none;
   }
   .navbar-title {
     font-size: 18px;
+  }
+  .profile-logo-wrapper {
+    width: 42px;
+    height: 42px;
   }
 }

@@ -5,23 +5,25 @@ import { eyebrowBoneNames, typingBoneNames } from "../../../data/boneData";
 const setAnimations = (gltf: GLTF) => {
   let character = gltf.scene;
   let mixer = new THREE.AnimationMixer(character);
-  if (gltf.animations) {
+  if (gltf.animations && gltf.animations.length > 0) {
     const introClip = gltf.animations.find(
       (clip) => clip.name === "introAnimation"
     );
-    const introAction = mixer.clipAction(introClip!);
-    introAction.setLoop(THREE.LoopOnce, 1);
-    introAction.clampWhenFinished = true;
-    introAction.play();
+    if (introClip) {
+      const introAction = mixer.clipAction(introClip);
+      introAction.setLoop(THREE.LoopOnce, 1);
+      introAction.clampWhenFinished = true;
+      introAction.play();
+    }
     const clipNames = ["key1", "key2", "key5", "key6"];
     clipNames.forEach((name) => {
       const clip = THREE.AnimationClip.findByName(gltf.animations, name);
       if (clip) {
         const action = mixer?.clipAction(clip);
-        action!.play();
-        action!.timeScale = 1.2;
-      } else {
-        console.error(`Animation "${name}" not found`);
+        if (action) {
+          action.play();
+          action.timeScale = 1.2;
+        }
       }
     });
     let typingAction: THREE.AnimationAction | null = null;
@@ -33,16 +35,23 @@ const setAnimations = (gltf: GLTF) => {
     }
   }
   function startIntro() {
-    const introClip = gltf.animations.find(
-      (clip) => clip.name === "introAnimation"
-    );
-    const introAction = mixer.clipAction(introClip!);
-    introAction.clampWhenFinished = true;
-    introAction.reset().play();
-    setTimeout(() => {
-      const blink = gltf.animations.find((clip) => clip.name === "Blink");
-      mixer.clipAction(blink!).play().fadeIn(0.5);
-    }, 2500);
+    if (gltf.animations && gltf.animations.length > 0) {
+      const introClip = gltf.animations.find(
+        (clip) => clip.name === "introAnimation"
+      );
+      if (introClip) {
+        const introAction = mixer.clipAction(introClip);
+        introAction.clampWhenFinished = true;
+        introAction.reset().play();
+      }
+      setTimeout(() => {
+        const blink = gltf.animations.find((clip) => clip.name === "Blink");
+        if (blink) {
+          const blinkAction = mixer.clipAction(blink);
+          if (blinkAction) blinkAction.play().fadeIn(0.5);
+        }
+      }, 2500);
+    }
   }
   function hover(gltf: GLTF, hoverDiv: HTMLDivElement) {
     let eyeBrowUpAction = createBoneAction(

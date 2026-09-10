@@ -5,70 +5,110 @@ const Career = () => {
     <div className="career-section section-container">
       <div className="career-container">
         <h2>
-          My career <span>&</span>
-          <br /> experience
+          My Journey to
+          <br /> Tech
         </h2>
         <div className="career-info">
-          <div className="career-timeline">
-            <div className="career-dot"></div>
-          </div>
+
+          {/* 2026 – Present */}
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Co-Founder</h4>
-                <h5>CallHQ.ai</h5>
+                <h4>AI Engineer & Full-Stack Dev</h4>
+                <h5>Open Source · Community</h5>
               </div>
-              <h3>NOW</h3>
+              <h3>2026</h3>
             </div>
             <p>
-              Building CallHQ.ai, a voice AI platform for
-              automating customer calls, support, and conversions.
+              Focused on AI engineering, intelligent automation, open-source development,
+              full-stack web development, cybersecurity, digital content creation, and
+              educational technology. Passionate about sharing knowledge and building
+              impactful solutions aligned with the future of technology.
             </p>
           </div>
+
+          {/* 2024–2025 – Bachelor's Degree & Advanced Technologies */}
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Adobe</h4>
-                <h5>6+ years · Noida</h5>
+                <h4>Freelancer & Tech Explorer</h4>
+                <h5>Fiverr · Upwork · Freelancer</h5>
               </div>
-              <h3>2017–24</h3>
+              <h3>2024–2025</h3>
             </div>
             <p>
-              Senior Lead Software Engineer (Feb 2024 – May 2024). Lead Software
-              Engineer (Feb 2021 – Feb 2024). Software Engineer II (Dec 2017 –
-              Feb 2021): internationalization, globalization, and localization for
-              Adobe Technical Communication Suite; functional and linguistic testing
-              strategy; in-house tooling; collaboration with product and engineering
-              for high-quality localized releases.
+              Explored AI, automation, AI agents, open-source software, web development,
+              bug bounty hunting, and web penetration testing in this time frame.
+              Delivered technology and creative solutions to clients worldwide as a freelancer.
             </p>
           </div>
+
+          {/* 2023–2024 – Electronics, Mobile & Hardware Repair */}
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Consultant</h4>
-                <h5>Genpact Headstrong </h5>
+                <h4>Electronics & HW Technician</h4>
+                <h5>Repair Center · Practical Work</h5>
               </div>
-              <h3>2016–17</h3>
+              <h3>2023–2024</h3>
             </div>
             <p>
-              Sep 2016 – Nov 2017. Developed and maintained WCF services consumed
-              by the UI; deployment support across environments; NUnit tests and
-              coverage; bug fixes from QA and users; database work.
+              Worked at an electronics, mobile, and computer hardware repair center.
+              Gained deep exposure to hardware/software diagnostics, firmware installation,
+              custom ROM flashing, kernel modifications, OS installation, and device repair.
             </p>
           </div>
+
+
+          {/* 2022 – Programming, Cybersecurity & Linux */}
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Sf Engineer</h4>
-                <h5>Infogain</h5>
+                <h4>Software Dev & Cybersecurity</h4>
+                <h5>Independent · Self-Study</h5>
               </div>
-              <h3>2013-16</h3>
+              <h3>2022</h3>
             </div>
             <p>
-              Software engineering across enterprise projects, contributing to
-              design, development, and delivery of business applications.
+              Learned C, JavaScript, Python, and batch scripting while building projects
+              and strengthening problem-solving skills. Explored cybersecurity, embedded
+              systems, and Linux—gaining practical knowledge of OS architecture and
+              secure software practices.
             </p>
           </div>
+
+          {/* 2020 – Content Creation & Creative Design */}
+          <div className="career-info-box">
+            <div className="career-info-in">
+              <div className="career-role">
+                <h4>Content Creator</h4>
+                <h5>YouTube · Digital Media</h5>
+              </div>
+              <h3>2020</h3>
+            </div>
+            <p>
+              Produced gaming content on YouTube, gaining proficiency in digital media
+              production, graphic design, photo editing, and video editing. Used tools
+              such as PixelLab, Photoshop Express (PSCC), Adobe Lightroom, and KineMaster.
+            </p>
+          </div>
+
+          {/* 2018 – Beginning the Journey */}
+          <div className="career-info-box">
+            <div className="career-info-in">
+              <div className="career-role">
+                <h4>IoT & Electronics Hobbyist</h4>
+                <h5>School · Self-Taught</h5>
+              </div>
+              <h3>2018</h3>
+            </div>
+            <p>
+              Began exploring electronics and building IoT projects as a school student.
+              Built RC cars, hydroelectricity models, drones, and ship models while
+              learning electronic components, circuits, sensors, and embedded systems.
+            </p>
+          </div>
+
         </div>
       </div>
     </div>

@@ -3,6 +3,8 @@ import { DRACOLoader, GLTF, GLTFLoader } from "three-stdlib";
 import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
 import { decryptFile } from "./decrypt";
 
+const PASSWORD = "MyCharacter12";
+
 const setCharacter = (
   renderer: THREE.WebGLRenderer,
   scene: THREE.Scene,
@@ -13,33 +15,42 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
-  const loadCharacter = () => {
+  const loadCharacter = (onProgressCallback?: (progress: number) => void) => {
     return new Promise<GLTF | null>(async (resolve, reject) => {
-      try {
-        const encryptedBlob = await decryptFile(
-          "/models/character.enc?v=2",
-          "MyCharacter12"
-        );
-        const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
+      const KNOWN_SIZE = 181547476;
+      let blobUrl: string;
 
-        let character: THREE.Object3D;
-        loader.load(
-          blobUrl,
-          async (gltf) => {
-            character = gltf.scene;
+      try {
+        if (onProgressCallback) onProgressCallback(5);
+        const decrypted = await decryptFile("/models/character.enc?v=2", PASSWORD);
+        const blob = new Blob([decrypted], { type: "model/gltf-binary" });
+        blobUrl = URL.createObjectURL(blob);
+        if (onProgressCallback) onProgressCallback(20);
+      } catch (err) {
+        console.error("Failed to decrypt character model:", err);
+        return reject(err);
+      }
+
+      loader.load(
+        blobUrl,
+        async (gltf) => {
+          try {
+            const character = gltf.scene;
             await renderer.compileAsync(character, camera, scene);
+
             character.traverse((child: any) => {
               if (child.isMesh) {
                 const mesh = child as THREE.Mesh;
 
                 // Change clothing colors to match site theme
                 if (mesh.material) {
-                  if (mesh.name === "BODY.SHIRT") { // The shirt mesh
-                    const newMat = (mesh.material as THREE.Material).clone() as THREE.MeshStandardMaterial;
+                  const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+                  if (mesh.name === "BODY.SHIRT") {
+                    const newMat = (mat as THREE.Material).clone() as THREE.MeshStandardMaterial;
                     newMat.color = new THREE.Color("#8B4513");
                     mesh.material = newMat;
                   } else if (mesh.name === "Pant") {
-                    const newMat = (mesh.material as THREE.Material).clone() as THREE.MeshStandardMaterial;
+                    const newMat = (mat as THREE.Material).clone() as THREE.MeshStandardMaterial;
                     newMat.color = new THREE.Color("#000000");
                     mesh.material = newMat;
                   }
@@ -50,26 +61,36 @@ const setCharacter = (
                 mesh.frustumCulled = true;
               }
             });
+
             resolve(gltf);
             setCharTimeline(character, camera);
             setAllTimeline();
-            character!.getObjectByName("footR")!.position.y = 3.36;
-            character!.getObjectByName("footL")!.position.y = 3.36;
 
-            // Monitor scale is handled by GsapScroll.ts animations
+            const footR = character.getObjectByName("footR");
+            if (footR) footR.position.y = 3.36;
+            const footL = character.getObjectByName("footL");
+            if (footL) footL.position.y = 3.36;
 
+            URL.revokeObjectURL(blobUrl);
             dracoLoader.dispose();
-          },
-          undefined,
-          (error) => {
-            console.error("Error loading GLTF model:", error);
-            reject(error);
+          } catch (err) {
+            console.error("Error setting up character:", err);
+            resolve(gltf);
           }
-        );
-      } catch (err) {
-        reject(err);
-        console.error(err);
-      }
+        },
+        (xhr) => {
+          const total = xhr.total > 0 ? xhr.total : KNOWN_SIZE;
+          const raw = Math.min(100, Math.floor((xhr.loaded / total) * 100));
+          const p = Math.min(99, 20 + Math.floor((raw * 79) / 100));
+          if (onProgressCallback) {
+            onProgressCallback(p);
+          }
+        },
+        (error) => {
+          console.error("Error loading GLTF model:", error);
+          reject(error);
+        }
+      );
     });
   };
 

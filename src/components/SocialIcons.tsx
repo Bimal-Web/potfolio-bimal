@@ -1,7 +1,9 @@
 import {
   FaGithub,
-  FaInstagram,
+  FaWhatsapp,
   FaLinkedinIn,
+  FaInstagram,
+  FaFacebookF,
   FaYoutube,
 } from "react-icons/fa6";
 import "./styles/SocialIcons.css";
@@ -17,11 +19,21 @@ const SocialIcons = () => {
       const elem = item as HTMLElement;
       const link = elem.querySelector("a") as HTMLElement;
 
-      const rect = elem.getBoundingClientRect();
-      let mouseX = rect.width / 2;
-      let mouseY = rect.height / 2;
-      let currentX = 0;
-      let currentY = 0;
+      const updateRect = () => {
+        const rect = elem.getBoundingClientRect();
+        return {
+          width: rect.width || 44,
+          height: rect.height || 44,
+          left: rect.left,
+          top: rect.top
+        };
+      };
+
+      let r = updateRect();
+      let mouseX = r.width / 2;
+      let mouseY = r.height / 2;
+      let currentX = mouseX;
+      let currentY = mouseY;
 
       const updatePosition = () => {
         currentX += (mouseX - currentX) * 0.1;
@@ -34,20 +46,20 @@ const SocialIcons = () => {
       };
 
       const onMouseMove = (e: MouseEvent) => {
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        r = updateRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
 
-        if (x < 40 && x > 10 && y < 40 && y > 5) {
+        if (x >= 0 && x <= r.width && y >= 0 && y <= r.height) {
           mouseX = x;
           mouseY = y;
         } else {
-          mouseX = rect.width / 2;
-          mouseY = rect.height / 2;
+          mouseX = r.width / 2;
+          mouseY = r.height / 2;
         }
       };
 
       document.addEventListener("mousemove", onMouseMove);
-
       updatePosition();
 
       return () => {
@@ -60,52 +72,44 @@ const SocialIcons = () => {
     <div className="icons-section">
       <div className="social-icons" data-cursor="icons" id="social">
         <span>
-          <a
-            href="https://github.com/akashrmalhotra"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FaGithub />
-          </a>
-        </span>
-        <span>
-          <a
-            href="https://www.linkedin.com/in/akashrmalhotra/"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://linkedin.com/in/bimal-bbb7662a6" target="_blank" rel="noreferrer">
             <FaLinkedinIn />
           </a>
         </span>
         <span>
-          <a
-            href="https://www.youtube.com/@Leftbraincoder"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FaYoutube />
+          <a href="https://github.com/Bimal-Web" target="_blank" rel="noreferrer">
+            <FaGithub />
           </a>
         </span>
         <span>
-          <a
-            href="https://www.instagram.com/leftbraincoder/"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://wa.me/+9779805638207" target="_blank" rel="noreferrer">
+            <FaWhatsapp />
+          </a>
+        </span>
+        <span>
+          <a href="https://www.instagram.com/bimal56902?igsh=Z3RlMjAwOXpoMzd1" target="_blank" rel="noopener noreferrer">
             <FaInstagram />
+          </a>
+        </span>
+        <span>
+          <a href="https://www.facebook.com/profile.php?id=61593299496584" target="_blank" rel="noopener noreferrer">
+            <FaFacebookF />
+          </a>
+        </span>
+        <span>
+          <a href="https://www.youtube.com/@kindgaming9352" target="_blank" rel="noopener noreferrer">
+            <FaYoutube />
           </a>
         </span>
       </div>
       <a
         className="resume-button"
-        href="/Akash_Malhotra.pdf"
+        href="/Bimal_Resume.pdf"
         target="_blank"
         rel="noreferrer"
       >
         <HoverLinks text="RESUME" />
-        <span>
-          <TbNotes />
-        </span>
+        <span><TbNotes /></span>
       </a>
     </div>
   );

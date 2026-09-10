@@ -1,36 +1,64 @@
+/* ─── FONT SYSTEM ───────────────────────────────────────────
+   Heading  : Plus Jakarta Sans  — geometric, premium, modern
+   Body/UI  : Inter              — ultra-legible, clean
+   Label    : JetBrains Mono     — accent badges, code, tags
+   Fallback : Geist (already loaded via Vite)
+──────────────────────────────────────────────────────────── */
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 
 :root {
-  font-family: "Geist", sans-serif;
+  /* ── Font families ── */
+  --font-heading : "Plus Jakarta Sans", "Geist", sans-serif;
+  --font-body    : "Inter", "Geist", sans-serif;
+  --font-mono    : "JetBrains Mono", monospace;
 
-  font-optical-sizing: auto;
-  font-style: normal;
-  line-height: 1.5;
-  scroll-behavior: smooth;
-  color-scheme: light dark;
-  color: #eae5ec;
-  background-color: var(--backgroundColor);
+  /* ── Colours ── */
+  --accentColor      : #5eead4;
+  --accentColorDark  : #0d9488;
+  --accentColorLight : #99f6e4;
+  --backgroundColor  : #0a0e17;
+  --surfaceColor     : rgba(255, 255, 255, 0.03);
+  --borderColor      : rgba(255, 255, 255, 0.07);
+  --textPrimary      : #f0f4f8;
+  --textSecondary    : rgba(255, 255, 255, 0.55);
+  --textMuted        : rgba(255, 255, 255, 0.3);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  --accentColor: #5eead4;
-  --backgroundColor: #0a0e17;
+  /* ── Viewport ── */
   --vh: 100vh;
   --vh: 100svh;
+
+  /* Base typography */
+  font-family       : var(--font-body);
+  font-optical-sizing: auto;
+  font-style        : normal;
+  line-height       : 1.6;
+  color-scheme      : light dark;
+  color             : var(--textPrimary);
+  background-color  : var(--backgroundColor);
+  font-synthesis    : none;
+  text-rendering    : optimizeLegibility;
+  -webkit-font-smoothing  : antialiased;
+  -moz-osx-font-smoothing : grayscale;
+  user-select         : none;
+  -webkit-user-select : none;
+  -moz-user-select    : none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Geist", sans-serif;
+/* ── Headings use display font ─────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family : var(--font-heading);
+  line-height : 1.1;
+  font-weight : 700;
+}
+
+/* Prevent any element from breaking out of viewport */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
@@ -68,7 +96,8 @@ body {
   height: auto;
   background-color: #050810;
   flex-grow: 1;
-  --cWidth: calc(100% - 30px);
+  /* Mobile-first: tighter side padding on small screens */
+  --cWidth: calc(100% - 28px);
   --cMaxWidth: 1920px;
   max-width: 100vw;
   overflow-x: hidden;
@@ -83,6 +112,8 @@ body {
   width: 100%;
   margin: auto;
   position: relative;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .container1 {
@@ -103,35 +134,108 @@ body {
   flex-wrap: nowrap;
 }
 
+/* ── TechStack section ───────────────────────────────────── */
 .techstack {
   width: 100%;
+  height: 100svh;
+  min-height: 600px;
   position: relative;
-  overflow: clip;
-  height: var(--vh);
-  margin: auto;
-  margin-top: 50px;
-  margin-bottom: -100px;
+  overflow: hidden;
+  margin: 0 auto;
+  margin-top: 40px;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.techstack h2 {
-  font-size: 80px;
-  text-align: center;
-  position: absolute;
+.techstack-header {
   width: 100%;
-  top: 120px;
-  left: 0;
+  text-align: center;
+  padding: 40px 20px 10px 20px;
+  z-index: 2;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.techstack-header h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 5.5vw, 76px);
+  text-align: center;
   font-weight: 400;
   text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  color: var(--textPrimary);
+  pointer-events: none;
 }
 
-@media screen and (min-width: 768px) {
+.techstack-canvas-container {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.techstack-canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* ── Wider padding on larger mobile ── */
+@media screen and (min-width: 480px) {
   body {
-    --cWidth: 94%;
+    --cWidth: calc(100% - 36px);
   }
 }
 
-@media screen and (max-width: 900px) {
-  .techstack h2 {
-    font-size: 40px;
+/* ── Tablet & up ── */
+@media screen and (min-width: 768px) {
+  body {
+    --cWidth: calc(100% - 60px);
+  }
+}
+
+/* ── Desktop & up ── */
+@media screen and (min-width: 1024px) {
+  body {
+    --cWidth: calc(100% - 100px);
+  }
+}
+
+/* ── Mobile phones (≤480px) ── */
+@media screen and (max-width: 480px) {
+  .techstack {
+    height: 85svh;
+    min-height: 520px;
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+  .techstack-header {
+    padding: 24px 16px 8px 16px;
+  }
+  .techstack-header h2 {
+    font-size: clamp(24px, 7.5vw, 36px);
+    letter-spacing: 1px;
+  }
+}
+
+/* ── Large phones / small tablets (481px – 768px) ── */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .techstack {
+    height: 90svh;
+    min-height: 580px;
+    margin-top: 30px;
+    margin-bottom: 0;
+  }
+  .techstack-header {
+    padding: 30px 20px 10px 20px;
+  }
+  .techstack-header h2 {
+    font-size: clamp(28px, 6vw, 48px);
   }
 }

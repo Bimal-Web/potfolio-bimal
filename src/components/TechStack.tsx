@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useRef, useMemo, useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
 import {
@@ -13,20 +13,34 @@ import {
 
 const textureLoader = new THREE.TextureLoader();
 const imageUrls = [
-  "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
   "/images/javascript.webp",
+  "/images/react2.webp",
+  "/images/html5.webp",
+  "/images/davinci.webp",
+  "/images/aftereffects.webp",
+  "/images/blender2.webp",
+  "/images/css3.webp",
+  "/images/bootstrap.webp",
+  "/images/git.webp",
+  "/images/bash2.webp",
+  "/images/hydra.webp",
+  "/images/nmap.webp",
+  "/images/metasploit.webp",
+  "/images/aws.webp",
+  "/images/python2.webp",
+  "/images/linux2.webp",
+  "/images/illustrator.webp",
+  "/images/java.webp",
+  "/images/aircrack.webp",
+  "/images/beef.webp",
+  "/images/iot.webp",
+  "/images/photoshop.webp",
 ];
 const textures = imageUrls.map((url) => textureLoader.load(url));
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
 
-const spheres = [...Array(30)].map(() => ({
+const spheres = [...Array(imageUrls.length)].map(() => ({
   scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
 }));
 
@@ -124,33 +138,52 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
   );
 }
 
-const TechStack = () => {
-  const [isActive, setIsActive] = useState(false);
+/**
+ * Dynamically adjusts camera distance based on viewport aspect ratio:
+ * On desktop (wide), camera distance remains at default z = 20.
+ * On mobile/tablet (portrait), camera pulls back smoothly so the 3D bubble cluster
+ * has ample room to form a round cluster in the center without being squished.
+ */
+function ResponsiveCamera() {
+  const { camera, size } = useThree();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
-    };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-    window.addEventListener("scroll", handleScroll);
+    const aspect = size.width / Math.max(1, size.height);
+    if (aspect < 1.1) {
+      // Mobile / portrait: scale z back gracefully up to 26
+      const targetZ = Math.min(26, 20 * (1.1 / Math.max(0.6, aspect)));
+      camera.position.z = targetZ;
+    } else {
+      camera.position.z = 20;
+    }
+    camera.updateProjectionMatrix();
+  }, [camera, size]);
+
+  return null;
+}
+
+const TechStack = () => {
+  const [isActive, setIsActive] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsActive(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    const el = containerRef.current;
+    if (el) observer.observe(el);
+
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      if (el) observer.unobserve(el);
     };
   }, []);
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
@@ -167,46 +200,62 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
-      <h2> My Techstack</h2>
+    <div className="techstack" ref={containerRef} id="techstack">
+      {/* 1. First place: The title header */}
+      <div className="techstack-header">
+        <h2>MY TECHSTACK</h2>
+      </div>
 
-      <Canvas
-        shadows
-        gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
-        camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
-        onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas"
-      >
-        <ambientLight intensity={1} />
-        <spotLight
-          position={[20, 20, 25]}
-          penumbra={1}
-          angle={0.2}
-          color="white"
-          castShadow
-          shadow-mapSize={[512, 512]}
-        />
-        <directionalLight position={[0, 5, -4]} intensity={2} />
-        <Physics gravity={[0, 0, 0]}>
-          <Pointer isActive={isActive} />
-          {spheres.map((props, i) => (
-            <SphereGeo
-              key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
-              isActive={isActive}
-            />
-          ))}
-        </Physics>
-        <Environment
-          files="/models/char_enviorment.hdr"
-          environmentIntensity={0.5}
-          environmentRotation={[0, 4, 2]}
-        />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
-      </Canvas>
+      {/* 2. Then those bubbles: 3D interactive physics canvas */}
+      <div className="techstack-canvas-container">
+        <Canvas
+          shadows={false}
+          dpr={[1, 1.5]}
+          gl={{
+            powerPreference: "high-performance",
+            alpha: true,
+            stencil: false,
+            depth: true,
+            antialias: false,
+          }}
+          camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
+          onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <ResponsiveCamera />
+          <ambientLight intensity={1} />
+          <spotLight
+            position={[20, 20, 25]}
+            penumbra={1}
+            angle={0.2}
+            color="white"
+            castShadow={false}
+          />
+          <directionalLight position={[0, 5, -4]} intensity={2} />
+          <Physics gravity={[0, 0, 0]}>
+            <Pointer isActive={isActive} />
+            {spheres.map((props, i) => (
+              <SphereGeo
+                key={i}
+                {...props}
+                material={materials[i % materials.length]}
+                isActive={isActive}
+              />
+            ))}
+          </Physics>
+          <Environment
+            files="/models/char_enviorment.hdr"
+            environmentIntensity={0.5}
+            environmentRotation={[0, 4, 2]}
+          />
+          <EffectComposer enableNormalPass={false} multisampling={0}>
+            <N8AO color="#0f002c" aoRadius={2} intensity={1.15} halfRes quality="low" />
+          </EffectComposer>
+        </Canvas>
+      </div>
     </div>
   );
 };

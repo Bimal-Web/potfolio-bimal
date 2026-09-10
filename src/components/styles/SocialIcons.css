@@ -1,3 +1,7 @@
+/* ══════════════════════════════════════════════════════
+   SOCIAL ICONS + RESUME BUTTON
+   ══════════════════════════════════════════════════════ */
+
 .icons-section {
   position: fixed;
   max-width: var(--cMaxWidth);
@@ -6,31 +10,48 @@
   z-index: 99;
   left: 50%;
   transform: translateX(-50%);
+  pointer-events: none;
 }
+
+/* Social icon strip (left side) */
 .social-icons {
   position: absolute;
   left: -20px;
-  bottom: 20px;
-  display: none;
+  bottom: 24px;
+  display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   z-index: 999;
-  padding: 10px;
+  padding: 6px;
+  pointer-events: all;
 }
+
 .social-icons:hover {
   transition: 0.3s;
-  color: var(--backgroundColor);
 }
-.social-icons a:hover {
-  color: var(--backgroundColor);
-  /* transform: scale(1.2); */
-}
+
 .social-icons span {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.social-icons span:hover {
+  background: rgba(94, 234, 212, 0.15);
+  border-color: var(--accentColor);
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 8px 20px rgba(94, 234, 212, 0.25);
+}
+
 .social-icons a {
   --siLeft: 50%;
   --siTop: 50%;
@@ -39,39 +60,60 @@
   top: var(--siTop, 50%);
   transform: translate(-50%, -50%);
   display: flex;
-  font-size: 23px;
+  font-size: 20px;
+  color: var(--textPrimary);
   will-change: left, top;
-  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, color 0.3s ease;
 }
+
+.social-icons span:hover a {
+  color: var(--accentColor);
+}
+
+/* ── Resume button ── */
 .resume-button {
   position: absolute;
   z-index: 99;
   display: flex;
-  gap: 5px;
-  bottom: 40px;
-  right: 0;
+  align-items: center;
+  gap: 6px;
+  bottom: 120px;
+  right: 10px;
   width: auto;
-  text-wrap: nowrap;
-  letter-spacing: 4px;
-  font-size: 15px;
-  line-height: 15px;
+  white-space: nowrap;
+  letter-spacing: 3px;
+  font-size: 14px;
+  font-family: var(--font-mono);
   font-weight: 600;
-  color: #5e5e5e;
+  color: var(--textSecondary);
   cursor: pointer;
-  transition: 0.5s;
-  transform-origin: left bottom;
-  transform: translateX(100%) rotateZ(-90deg);
+  transition: all 0.3s ease;
+  transform-origin: right bottom;
+  transform: rotate(-90deg);
+  pointer-events: all;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(10, 14, 23, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+
 .resume-button:hover {
-  color: #fff;
+  color: var(--accentColor);
+  border-color: var(--accentColor);
+  box-shadow: 0 0 20px rgba(94, 234, 212, 0.25);
 }
+
 div.resume-button span {
-  color: #fff;
-  font-size: 17px;
+  color: var(--accentColor);
+  font-size: 16px;
   margin-top: -1px;
   display: flex;
   align-items: center;
 }
+
+/* Unused debug line — keep but hide */
 .check-line {
   position: fixed;
   top: 655px;
@@ -80,24 +122,203 @@ div.resume-button span {
   background-color: #ffffff;
   width: 100%;
   z-index: 99999;
+  display: none;
 }
-@media only screen and (min-width: 900px) {
-  .social-icons {
-    display: flex;
-    gap: 20px;
-  }
-  .social-icons a {
-    font-size: 28px;
-  }
-}
-@media only screen and (min-width: 768px) {
+
+/* ═══════════════════════════════════════════════════════
+   BREAKPOINTS
+   ═══════════════════════════════════════════════════════ */
+
+/* Mobile (≤ 767px) — floating pill, doesn't rotate */
+@media only screen and (max-width: 767px) {
   .resume-button {
     transform: none;
-    font-size: 20px;
-    line-height: 20px;
+    position: fixed;
+    bottom: 14px;
+    right: 14px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    line-height: 13px;
+    padding: 8px 16px;
+    background: rgba(10, 14, 23, 0.88);
+    border: 1px solid rgba(94, 234, 212, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--accentColor);
+    box-shadow: 0 4px 20px rgba(94, 234, 212, 0.15);
   }
+
+  .resume-button:hover {
+    background: rgba(94, 234, 212, 0.15);
+    box-shadow: 0 4px 24px rgba(94, 234, 212, 0.3);
+    color: #ffffff;
+  }
+
   div.resume-button span {
-    font-size: 23px;
-    margin-top: -1.5px;
+    color: var(--accentColor);
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  .social-icons {
+    bottom: 80px;
+    left: 10px;
+    gap: 12px;
+  }
+
+  .social-icons span {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-icons a {
+    font-size: 18px;
+  }
+}
+
+/* Tablet (768px+) — rotated button */
+@media only screen and (min-width: 768px) {
+  .resume-button {
+    transform-origin: right bottom;
+    transform: rotate(-90deg);
+    font-size: 13px;
+    letter-spacing: 3px;
+  }
+
+  div.resume-button span {
+    font-size: 16px;
+  }
+}
+
+/* 900px+ — adjust social icons */
+@media only screen and (min-width: 900px) {
+  .social-icons {
+    left: -20px;
+    gap: 16px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESUME PDF MODAL
+   ══════════════════════════════════════════════════════ */
+
+.resume-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.25s ease;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.resume-modal {
+  position: relative;
+  width: 92vw;
+  max-width: 900px;
+  height: 90vh;
+  background: #0f1322;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(94, 234, 212, 0.15);
+  animation: slideUpModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(40px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+.resume-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.resume-modal-close:hover {
+  background: rgba(94, 234, 212, 0.15);
+  border-color: var(--accentColor);
+  color: var(--accentColor);
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.resume-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.resume-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(94, 234, 212, 0.2);
+  border-top-color: var(--accentColor);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.resume-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.resume-fallback a {
+  color: var(--accentColor);
+  text-decoration: underline;
+  font-size: 15px;
+}
+
+/* Modal — full screen on tiny phones */
+@media only screen and (max-width: 480px) {
+  .resume-modal {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
   }
 }

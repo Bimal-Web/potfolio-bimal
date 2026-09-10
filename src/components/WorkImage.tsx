@@ -6,6 +6,8 @@ interface Props {
   alt?: string;
   video?: string;
   link?: string;
+  imgFit?: "cover" | "contain";
+  imgPosition?: string;
 }
 
 const WorkImage = (props: Props) => {
@@ -21,14 +23,17 @@ const WorkImage = (props: Props) => {
     }
   };
 
+  const Wrapper = props.link ? "a" : "div";
+
   return (
     <div className="work-image">
-      <a
+      <Wrapper
         className="work-image-in"
-        href={props.link}
+        {...(props.link
+          ? { href: props.link, target: "_blank", rel: "noopener noreferrer" }
+          : {})}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsVideo(false)}
-        target="_blank"
         data-cursor={"disable"}
       >
         {props.link && (
@@ -36,9 +41,16 @@ const WorkImage = (props: Props) => {
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt} />
+        <img
+          src={props.image}
+          alt={props.alt}
+          style={{
+            objectFit: props.imgFit ?? "cover",
+            objectPosition: props.imgPosition ?? "center center",
+          }}
+        />
         {isVideo && <video src={video} autoPlay muted playsInline loop></video>}
-      </a>
+      </Wrapper>
     </div>
   );
 };
