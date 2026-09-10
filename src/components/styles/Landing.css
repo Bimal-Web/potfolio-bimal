@@ -415,7 +415,7 @@
     left: auto;
     transform: translateY(-50%);
     text-align: right;
-    width: auto;
+    width: 100%;
     max-width: 42%;
     z-index: 15;
     display: flex;
@@ -430,7 +430,6 @@
     display: flex;
     justify-content: flex-end;
     position: relative;
-    overflow: hidden;
   }
 
   .landing-role-pair {
