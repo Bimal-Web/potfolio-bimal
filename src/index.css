@@ -151,6 +151,7 @@ body {
 }
 
 .techstack-header {
+  display: none;
   width: 100%;
   text-align: center;
   padding: 40px 20px 10px 20px;
@@ -205,6 +206,10 @@ body {
   body {
     --cWidth: calc(100% - 100px);
   }
+
+  .techstack-header {
+    display: block;
+  }
 }
 
 /* ── Mobile phones (≤480px) ── */
@@ -216,11 +221,7 @@ body {
     margin-bottom: 0;
   }
   .techstack-header {
-    padding: 24px 16px 8px 16px;
-  }
-  .techstack-header h2 {
-    font-size: clamp(24px, 7.5vw, 36px);
-    letter-spacing: 1px;
+    display: none !important;
   }
 }
 
@@ -233,9 +234,6 @@ body {
     margin-bottom: 0;
   }
   .techstack-header {
-    padding: 30px 20px 10px 20px;
-  }
-  .techstack-header h2 {
-    font-size: clamp(28px, 6vw, 48px);
+    display: none !important;
   }
 }
